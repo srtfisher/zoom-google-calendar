@@ -104,13 +104,10 @@ class Client {
     $events = $calendar_client->events;
 
     // Start/end range.
-    $start_range = Carbon::now()->subMinutes(10)->format(\DateTime::RFC3339);
-    var_Dump($start_range);exit;
-    $end_range = Carbon::now()->addMinutes(60)->format(\DateTime::RFC3339);
-    $start_range = Carbon::createFromDate(2017, 8, 14, 'America/New_York')->setTime(12, 22);
-    $end_range = Carbon::createFromDate(2017, 8, 14, 'America/New_York')->setDate(2017, 8, 14)->setTime(13, 22);
+    $start_range = Carbon::now($_ENV['TIMEZONE'])->subMinutes(10);
+    $end_range = Carbon::now($_ENV['TIMEZONE'])->addMinutes(60);
 
-    return $calendar_client->events->listEvents(CALENDAR, [
+    return $calendar_client->events->listEvents($_ENV['CALENDAR'], [
       'timeMin' => $start_range->format(\DateTime::RFC3339),
       'timeMax' => $end_range->format(\DateTime::RFC3339)
     ]);

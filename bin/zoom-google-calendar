@@ -9,13 +9,14 @@ use Symfony\Component\Console\Application;
 // Load Composer.
 require __DIR__ . '/../vendor/autoload.php';
 
+// Load configuration.
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../');
+$dotenv->load();
+
 // Load the calendar.
-if (!file_exists(__DIR__ .'/../.calendar')) {
+if (empty($_ENV['CALENDAR'])) {
   die('Calendar not defined.');
 }
-
-// Define the calendar.
-define('CALENDAR', trim(file_get_contents(__DIR__ .'/../.calendar')));
 
 // Define the application.
 define('APPLICATION_NAME', 'Zoom Google Calendar');
@@ -23,6 +24,7 @@ define('CREDENTIALS_PATH', __DIR__ . '/../.credentials/creds.json');
 define('CLIENT_SECRET_PATH', __DIR__ . '/../.credentials/client_secret.json');
 define('SCOPES', Google_Service_Calendar::CALENDAR_READONLY);
 
+// Load up the client.
 $client = new Zoom_Calendar\Client;
 
 // Define the application.

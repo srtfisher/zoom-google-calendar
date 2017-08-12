@@ -34,6 +34,10 @@ class Calendar extends Command {
     // Retrieve the events.
     $events = $client->getEvents();
 
+    if (count($events) === 0) {
+      return $output->writeln('<error>No events found.</error>');
+    }
+
     if (count($events) > 0) {
       $output->writeln('Multiple events found.' . PHP_EOL);
 
@@ -47,8 +51,10 @@ class Calendar extends Command {
 
       $output->writeln(PHP_EOL . 'No other events found.');
     } else {
-      $output->writeln('Single event found! Opening...');
-      $client->openEvent(array_shift($events));
+      $output->writeln('Event found!');
+      $event = reset($events);
+      $this->writeln(sprintf('Opening "%s"...', $event->summary));
+      $client->openEvent($event);
     }
   }
 }
