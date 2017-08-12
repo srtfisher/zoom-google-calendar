@@ -17,3 +17,11 @@ This is a helpful CLI script that will pull in your calendar and open up the lat
 ### Opening the Zoom URL
 
 Once you are within 10 minutes before or 60 minutes after a calendar event, you can run `bin/zoom-google-calendar open-calendar` to let the program pull in your events and connect you to a Zoom meeting. If you have multiple events that overlap within that timespan, it will let you select the event interactively.
+
+### Alias
+
+To make this easier for you, you can add an alias to your bash initialization script to make this even better.
+
+```bash
+ALIAS zgc='~/path/to/zoom-google-calendar/bin/zoom-google-calendar'
+```
