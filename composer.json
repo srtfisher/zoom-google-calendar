@@ -1,0 +1,18 @@
+{
+    "name": "srtfisher/zoom-google-calendar",
+    "description": "Zoom Google Calendar CLI Opener",
+    "authors": [
+        {
+            "name": "Sean Fisher",
+            "email": "srtfisher@gmail.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.0",
+        "symfony/console": "^3.3",
+        "nesbot/carbon": "^1.22"
+    },
+    "autoload": {
+        "psr-4": {"Zoom_Calendar\\": "src/"}
+    }
+}

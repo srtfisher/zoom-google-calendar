@@ -1,0 +1,32 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Zoom Google Calendar
+ */
+
+use Symfony\Component\Console\Application;
+
+// Load Composer.
+require __DIR__ . '/../vendor/autoload.php';
+
+// Load the calendar.
+if (!file_exists(__DIR__ .'/../.calendar')) {
+  die('Calendar not defined.');
+}
+
+// Define the calendar.
+define('CALENDAR', trim(file_get_contents(__DIR__ .'/../.calendar')));
+
+// Define the application.
+define('APPLICATION_NAME', 'Zoom Google Calendar');
+define('CREDENTIALS_PATH', __DIR__ . '/../.credentials/creds.json');
+define('CLIENT_SECRET_PATH', __DIR__ . '/../.credentials/client_secret.json');
+define('SCOPES', Google_Service_Calendar::CALENDAR_READONLY);
+
+$client = new Zoom_Calendar\Client;
+
+// Define the application.
+$application = new Application('Zoom Google Calendar', '0.1');
+$application->add(new Zoom_Calendar\Command\Calendar);
+$application->add(new Zoom_Calendar\Command\Authenticate);
+$application->run();
