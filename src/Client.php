@@ -9,6 +9,9 @@ use Carbon\Carbon;
 use Google_Client;
 use Google_Service_Calendar_Event;
 
+/**
+ * Zoom Calendar Client
+ */
 class Client {
   /**
    * Google Client instance.
@@ -95,11 +98,11 @@ class Client {
   }
 
   /**
-   * Get events
+   * Get events with a Zoom URL.
    *
-   * @return Google_Service_Calendar_Events
+   * @return array
    */
-  public function getEvents() {
+  public function getEvents() : array {
     $calendar_client = new \Google_Service_Calendar(static::$client);
     $events = $calendar_client->events;
 
@@ -107,10 +110,21 @@ class Client {
     $start_range = Carbon::now($_ENV['TIMEZONE'])->subMinutes(10);
     $end_range = Carbon::now($_ENV['TIMEZONE'])->addMinutes(60);
 
-    return $calendar_client->events->listEvents($_ENV['CALENDAR'], [
+    $calendar_events = $calendar_client->events->listEvents($_ENV['CALENDAR'], [
       'timeMin' => $start_range->format(\DateTime::RFC3339),
       'timeMax' => $end_range->format(\DateTime::RFC3339)
     ]);
+
+    $events = [];
+    if (count($calendar_events) > 0) {
+      foreach ($calendar_events as $calendar_event) {
+        if (!empty($this->getZoomUrls($calendar_event))) {
+          $events[$calendar_event->id] = $calendar_event;
+        }
+      }
+    }
+
+    return $events;
   }
 
   /**
@@ -127,6 +141,21 @@ class Client {
    * Open an event
    */
   public function openEvent(Google_Service_Calendar_Event $event) {
+    $zoom_url = $this->getZoomUrls($event);
+
+    if (!empty($zoom_url)) {
+      // Attempt to open the URL in the browser using a Apple CLI command.
+      return $this->openUrl($zoom_url);
+    }
+  }
+
+  /**
+   * Extract a Zoom URL from text.
+   *
+   * @param Google_Service_Calendar_Event $event Event to get URLs from.
+   * @return string Zoom URL or empty string.
+   */
+  protected function getZoomUrls(Google_Service_Calendar_Event $event) : string {
     $texts = [];
 
     if (!empty($event->getLocation())) {
@@ -137,22 +166,7 @@ class Client {
       $texts[] = $event->getDescription();
     }
 
-    foreach ($texts as $text) {
-      $zoom_url = $this->getZoomUrls($text);
-      if (!empty($zoom_url)) {
-        // Attempt to open the URL in the browser using a Apple CLI command.
-        return $this->openUrl($zoom_url);
-      }
-    }
-  }
-
-  /**
-   * Extract a Zoom URL from text.
-   *
-   * @param string $text Text to extract from.
-   * @return string Zoom URL or empty string.
-   */
-  protected function getZoomUrls(string $text) : string {
+    $text = implode(' ', $texts);
     preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $text, $matches);
 
     if (empty($matches[0])) {
