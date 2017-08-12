@@ -23,5 +23,5 @@ Once you are within 10 minutes before or 60 minutes after a calendar event, you 
 To make this easier for you, you can add an alias to your bash initialization script to make this even better.
 
 ```bash
-ALIAS zgc='~/path/to/zoom-google-calendar/bin/zoom-google-calendar'
+ALIAS zgc='~/path/to/zoom-google-calendar/bin/zoom-google-calendar open-calendar'
 ```
