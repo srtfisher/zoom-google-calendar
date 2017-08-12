@@ -43,7 +43,7 @@ class Calendar extends Command {
 
       $helper = $this->getHelper('question');
       foreach ($events as $event) {
-        $question = new ConfirmationQuestion(sprintf('Open "%s"? ', trim($event->summary)), false);
+        $question = new ConfirmationQuestion(sprintf('Open "%s"? [y/n]', trim($event->summary)), true);
         if ($helper->ask($input, $output, $question)) {
           return $client->openEvent($event);
         }
