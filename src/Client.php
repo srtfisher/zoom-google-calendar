@@ -112,7 +112,10 @@ class Client {
 
     $calendar_events = $calendar_client->events->listEvents($_ENV['CALENDAR'], [
       'timeMin' => $start_range->format(\DateTime::RFC3339),
-      'timeMax' => $end_range->format(\DateTime::RFC3339)
+      'timeMax' => $end_range->format(\DateTime::RFC3339),
+      'orderBy' => 'startTime',
+      'showDeleted' => false,
+      'singleEvents' => true,
     ]);
 
     $events = [];
