@@ -108,7 +108,7 @@ class Client {
 
     // Start/end range.
     $start_range = Carbon::now($_ENV['TIMEZONE'])->subMinutes(10);
-    $end_range = Carbon::now($_ENV['TIMEZONE'])->addMinutes(60);
+    $end_range = Carbon::now($_ENV['TIMEZONE'])->addMinutes(30);
 
     $calendar_events = $calendar_client->events->listEvents($_ENV['CALENDAR'], [
       'timeMin' => $start_range->format(\DateTime::RFC3339),
