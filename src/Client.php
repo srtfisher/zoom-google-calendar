@@ -89,7 +89,7 @@ class Client {
     }
 
     file_put_contents(CREDENTIALS_PATH, json_encode($accessToken));
-    $output->writeln(sprintf("Credentials saved to %s\n", $credentialsPath));
+    $output->writeln(sprintf("Credentials saved to %s\n", CREDENTIALS_PATH));
 
     // Store the access token to the client.
     static::$client->setAccessToken($accessToken);
